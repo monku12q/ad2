@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - Live User Viewer</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .user-box {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+    }
+
+    .user-box div {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Admin Panel – Live User Data</h2>
+    <div id="userData"></div>
+  </div>
+
+  <div class="footer">
+    VeriSign &copy; Admin Panel - Firebase Users
+  </div>
+
+  <script>
+    const userData = document.getElementById("userData");
+
+    firebase.database().ref("users").on("child_added", snapshot => {
+      const data = snapshot.val();
+      const box = document.createElement("div");
+      box.className = "user-box";
+
+      for (const key in data) {
+        const line = document.createElement("div");
+        line.textContent = `${key}: ${data[key]}`;
+        box.appendChild(line);
+      }
+
+      // ⬆️ Prepend to top
+      userData.insertBefore(box, userData.firstChild);
+    });
+  </script>
+</body>
+</html>
